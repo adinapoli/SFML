@@ -2,3 +2,5 @@ dist*
 .hsenv*
 .cabal*
 cabal.sandbox.config
+**/**.o
+**/**.hi
