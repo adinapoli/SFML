@@ -1,12 +1,11 @@
 name:                SFML
 version:             0.3.0.0
 synopsis:            SFML bindings
-description:
-    Low level bindings for SFML 2.0.
+description:         Low level bindings for SFML 2.0.
 license:             MIT
 license-file:        LICENSE
-author:              Marc Sunet
-maintainer:          jeannekamikaze@gmail.com
+author:              Marc Sunet, Alfredo Di Napoli
+maintainer:          jeannekamikaze@gmail.com, alfredo.dinapoli@gmail.com
 homepage:            https://github.com/jeannekamikaze/SFML
 bug-reports:         https://github.com/jeannekamikaze/SFML/issues
 category:            Game

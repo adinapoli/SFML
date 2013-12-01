@@ -2,8 +2,6 @@ import SFML.Audio
 import SFML.Graphics
 import SFML.Window
 
-import Foreign.Ptr (nullPtr)
-
 import Paths_sfml_demos
 
 

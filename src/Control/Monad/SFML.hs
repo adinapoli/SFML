@@ -1,14 +1,17 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-module Control.Monad.SFML 
+module Control.Monad.SFML
   ( SFML
   , runSFML
   , createRenderWindow
+  , waitEvent
   , liftIO
+  , display
   )where
 
-import SFML.Window
-import SFML.Graphics hiding (createRenderWindow)
+import SFML.SFDisplayable hiding (display)
+import SFML.Window hiding (display, waitEvent)
+import SFML.Graphics hiding (display, waitEvent, createRenderWindow)
 import qualified SFML.Graphics as G
 import Control.Monad.State.Strict
 
@@ -43,5 +46,21 @@ createRenderWindow vm t stl cs = do
 
 
 --------------------------------------------------------------------------------
+io :: IO a -> SFML a
+io = liftIO
+
+
+--------------------------------------------------------------------------------
+display :: SFDisplayable a => a -> SFML ()
+display = io . G.display
+
+
+--------------------------------------------------------------------------------
+waitEvent :: SFWindow a => a -> SFML (Maybe SFEvent)
+waitEvent = io . G.waitEvent
+
+
+--------------------------------------------------------------------------------
+-- | Run the SFML monad, calling all the destructors appropriately.
 runSFML :: SFML a -> IO ()
 runSFML = join . fmap sequence_ . flip execStateT []
