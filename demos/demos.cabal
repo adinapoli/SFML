@@ -45,3 +45,9 @@ executable sfml-events
     buildable:          True
     ghc-options:        -debug
 
+executable sfml-monad
+    hs-source-dirs:     monad
+    build-depends:      base, SFML
+    main-is:            SFMLMonad.hs
+    buildable:          True
+    ghc-options:        -debug
