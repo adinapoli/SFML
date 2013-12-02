@@ -5,6 +5,7 @@ import SFML.Graphics hiding (
   waitEvent,
   createSprite,
   clearRenderWindow,
+  drawRectangle,
   createRenderWindow)
 import SFML.Window hiding (waitEvent, display)
 import Control.Monad.SFML
@@ -22,8 +23,9 @@ main = runSFML $ do
         videoMode = VideoMode 640 480 32
         title = "SFML Monad Demo"
     wnd <- createRenderWindow videoMode title [SFDefaultStyle] ctxSettings
-    spt <- createSprite
-    loop wnd
+    rect <- drawRectangleOfSize (Vec2f 30 30)
+    io $ setFillColor rect red
+    loop wnd rect
 
 
 --------------------------------------------------------------------------------
@@ -32,9 +34,10 @@ isCloseEvt _ = False
 
 
 --------------------------------------------------------------------------------
-loop :: RenderWindow -> SFML ()
-loop wnd = do
+loop :: RenderWindow -> RectangleShape -> SFML ()
+loop wnd rect = do
     clearRenderWindow wnd blue
+    drawRectangle wnd rect $ Just (renderStates { transform = translation 460 40 })
     display wnd
     quit <- isCloseEvt <$> waitEvent wnd
-    unless quit $ loop wnd
+    unless quit $ loop wnd rect

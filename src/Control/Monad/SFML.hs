@@ -1,16 +1,18 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Control.Monad.SFML
   ( SFML
   , runSFML
   , createRenderWindow
   , createSprite
+  , createRectangleShape
+  , drawRectangle
+  , drawRectangleOfSize
   , clearRenderWindow
   , waitEvent
-  , liftIO
+  , io
   , display
   )where
 
+import SFML.System.Vector2
 import SFML.Graphics.Color
 import SFML.SFDisplayable (SFDisplayable)
 import SFML.Window (SFEvent, SFWindow, VideoMode, WindowStyle, ContextSettings)
@@ -47,6 +49,30 @@ createRenderWindow vm t stl cs = do
 clearRenderWindow :: RenderWindow -> Color -> SFML ()
 clearRenderWindow wnd = io . G.clearRenderWindow wnd
 
+
+--------------------------------------------------------------------------------
+createRectangleShape :: SFML G.RectangleShape
+createRectangleShape = do
+  shp <- io . G.err $ G.createRectangleShape
+  modify $ \s -> G.destroy shp : s
+  return shp
+
+
+--------------------------------------------------------------------------------
+drawRectangle :: RenderWindow
+              -> G.RectangleShape
+              -> Maybe G.RenderStates
+              -> SFML ()
+drawRectangle wnd shp states = io $ G.drawRectangle wnd shp states
+
+
+--------------------------------------------------------------------------------
+drawRectangleOfSize :: Vec2f -> SFML G.RectangleShape
+drawRectangleOfSize size = do
+  shp <- io . G.err $ G.createRectangleShape
+  io $ G.setSize shp size
+  modify $ \s -> G.destroy shp : s
+  return shp
 
 --------------------------------------------------------------------------------
 io :: IO a -> SFML a

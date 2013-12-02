@@ -2,7 +2,10 @@ dist*
 .hsenv*
 .cabal*
 cabal.sandbox.config
+src/**.o
+src/**/**.o
 src/**/**.o
 src/**/**/**.o
+src/**.hi
 src/**/**.hi
 src/**/**/**.hi
