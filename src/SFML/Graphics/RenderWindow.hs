@@ -343,6 +343,10 @@ foreign import ccall unsafe "sfRenderWindow_getSystemHandle"
 
 --CSFML_GRAPHICS_API sfWindowHandle sfRenderWindow_getSystemHandle(const sfRenderWindow* renderWindow);
 
+foreign import ccall unsafe "sfRenderWindow_clear"
+    sfRenderWindow_clear :: RenderWindow -> Ptr Color -> IO ()
+
+--CSFML_GRAPHICS_API void sfRenderWindow_clear(sfRenderWindow *renderWindow, sfColor color)
 
 foreign import ccall unsafe "sfMouse_getPositionRenderWindow_helper"
     sfMouse_getPositionRenderWindow_helper :: RenderWindow -> Ptr Vec2i -> IO ()

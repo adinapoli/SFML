@@ -1,5 +1,11 @@
 import SFML.Audio
-import SFML.Graphics hiding (display, waitEvent, createRenderWindow)
+import SFML.Graphics.Color
+import SFML.Graphics hiding (
+  display,
+  waitEvent,
+  createSprite,
+  clearRenderWindow,
+  createRenderWindow)
 import SFML.Window hiding (waitEvent, display)
 import Control.Monad.SFML
 import Control.Monad
@@ -15,7 +21,8 @@ main = runSFML $ do
     let ctxSettings = Just $ ContextSettings 24 8 0 1 2
         videoMode = VideoMode 640 480 32
         title = "SFML Monad Demo"
-    wnd <- createRenderWindow videoMode title [SFDefaultStyle] Nothing
+    wnd <- createRenderWindow videoMode title [SFDefaultStyle] ctxSettings
+    spt <- createSprite
     loop wnd
 
 
@@ -27,6 +34,7 @@ isCloseEvt _ = False
 --------------------------------------------------------------------------------
 loop :: RenderWindow -> SFML ()
 loop wnd = do
+    clearRenderWindow wnd blue
     display wnd
     quit <- isCloseEvt <$> waitEvent wnd
     unless quit $ loop wnd

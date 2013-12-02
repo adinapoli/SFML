@@ -4,14 +4,17 @@ module Control.Monad.SFML
   ( SFML
   , runSFML
   , createRenderWindow
+  , createSprite
+  , clearRenderWindow
   , waitEvent
   , liftIO
   , display
   )where
 
-import SFML.SFDisplayable hiding (display)
-import SFML.Window hiding (display, waitEvent)
-import SFML.Graphics hiding (display, waitEvent, createRenderWindow)
+import SFML.Graphics.Color
+import SFML.SFDisplayable (SFDisplayable)
+import SFML.Window (SFEvent, SFWindow, VideoMode, WindowStyle, ContextSettings)
+import SFML.Graphics (Sprite, RenderWindow)
 import qualified SFML.Graphics as G
 import Control.Monad.State.Strict
 
@@ -29,20 +32,20 @@ type SFML a = StateT SFMLState IO a
 
 
 --------------------------------------------------------------------------------
-createRenderWindow
-    :: VideoMode
-    -- ^ Video mode to use
-    -> String
-    -- ^ Window title
-    -> [WindowStyle]
-    -- ^ Window style
-    -> Maybe ContextSettings
-    -- ^ Creation settings ('Nothing' to use default values)
-    -> SFML RenderWindow
+createRenderWindow :: VideoMode
+                   -> String
+                   -> [WindowStyle]
+                   -> Maybe ContextSettings
+                   -> SFML RenderWindow
 createRenderWindow vm t stl cs = do
     wnd <- liftIO $ G.createRenderWindow vm t stl cs
-    modify $ \s -> destroy wnd : s
+    modify $ \s -> G.destroy wnd : s
     return wnd
+
+
+--------------------------------------------------------------------------------
+clearRenderWindow :: RenderWindow -> Color -> SFML ()
+clearRenderWindow wnd = io . G.clearRenderWindow wnd
 
 
 --------------------------------------------------------------------------------
@@ -58,6 +61,14 @@ display = io . G.display
 --------------------------------------------------------------------------------
 waitEvent :: SFWindow a => a -> SFML (Maybe SFEvent)
 waitEvent = io . G.waitEvent
+
+
+--------------------------------------------------------------------------------
+createSprite :: SFML Sprite
+createSprite = do
+ spr <- io . G.err $ G.createSprite
+ modify $ \s -> G.destroy spr : s
+ return spr
 
 
 --------------------------------------------------------------------------------
